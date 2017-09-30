@@ -8,7 +8,7 @@ susan - notes & ad-hoc wiki
  ___/ / /_/ (__  ) /_/ / / / /
 /____/\__,_/____/\__,_/_/ /_/
 ```
-
+[![Build Status](https://travis-ci.org/undeadparrot/susan.svg?branch=master)](https://travis-ci.org/undeadparrot/susan)
 [![BCH compliance](https://bettercodehub.com/edge/badge/undeadparrot/susan?branch=master)](https://bettercodehub.com/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ba162c956b348c8b7cb4f246aa9c27a)](https://www.codacy.com/app/smatuszeksa/susan?utm_source=github.com&utm_medium=referral&utm_content=undeadparrot/susan&utm_campaign=badger)
 

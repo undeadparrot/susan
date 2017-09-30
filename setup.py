@@ -33,7 +33,8 @@ setup(
     ],
 
     # things import for setup
-    packages=find_packages(),
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     install_requires=[
         'click',
         'sqlalchemy',

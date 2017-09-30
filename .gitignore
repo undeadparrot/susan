@@ -1,0 +1,5 @@
+.cache
+**/__pycache__/**
+build/
+dist/
+src/susan.egg-info
