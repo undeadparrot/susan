@@ -10,6 +10,7 @@ from susan import db
 
 import pyperclip
 
+
 @click.group()
 @click.option('--debug/--no-debug', default=True)
 def cli(debug):
@@ -17,8 +18,7 @@ def cli(debug):
         click.get_app_dir('susan', 'config.ini', force_posix=True))
     bootstrap(filename=config_path)
     log_filename = get_config().get('logging', 'filename')
-    logging.basicConfig(
-        filename=log_filename, level=logging.DEBUG)
+    logging.basicConfig(filename=log_filename, level=logging.DEBUG)
     if debug:
         logging.debug('Debug mode')
 
@@ -80,10 +80,10 @@ def head(count, only_1, topic, all_topics, clipboard):
         topic = 'scratch'
     if all_topics:
         topic = None
-    notes = api.list_notes(conn, limit=1 if only_1 else count, offset=0, topic=topic)
+    notes = api.list_notes(
+        conn, limit=1 if only_1 else count, offset=0, topic=topic)
     conn.close()
     for note in notes:
         click.echo(note.body)
     if clipboard:
         pyperclip.copy("\n".join([_.body for _ in notes]))
-
