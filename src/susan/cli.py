@@ -41,11 +41,11 @@ def version():
 @click.option("--topic", "-t", default=None, help="topic name")
 @click.option("--clipboard", "-p", is_flag=True, help="paste from clipboard")
 @click.argument("body", required=False)
-def note(body, topic, clipboard):
+def note(body, topic, **kwargs):
     """Store a note in a topic
     """
     session = SESSIONMAKER()
-    if clipboard:
+    if kwargs['clipboard']:
         body = pyperclip.paste()
     if not body:
         body = click.edit()
@@ -63,18 +63,18 @@ def note(body, topic, clipboard):
 @click.option('--all-topics', is_flag=True)
 @click.option("--clipboard", "-p", is_flag=True, help="copy to clipboard")
 @click.argument("topic", required=False)
-def head(count, only_1, topic, all_topics, clipboard):
+def head(topic,**kwargs):
     """Get the latest n notes in a topic
     """
     session = SESSIONMAKER()
     if not topic:
         topic = DEFAULT_TOPIC
-    if all_topics:
+    if kwargs['all_topics']:
         topic = None
     notes = api.list_notes(
-        session, limit=1 if only_1 else count, offset=0, topic=topic)
+        session, limit=1 if kwargs['only_1'] else kwargs['count'], offset=0, topic=topic)
     session.commit()
     for item in notes:
         click.echo(item.body)
-    if clipboard:
+    if kwargs['clipboard']:
         pyperclip.copy("\n".join([_.body for _ in notes]))
