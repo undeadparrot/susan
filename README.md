@@ -1,6 +1,8 @@
 susan - notes & ad-hoc wiki
 ===========================
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ba162c956b348c8b7cb4f246aa9c27a)](https://www.codacy.com/app/smatuszeksa/susan?utm_source=github.com&utm_medium=referral&utm_content=undeadparrot/susan&utm_campaign=badger)
+
 ```
    _____
   / ___/__  ___________ _____
