@@ -1,19 +1,27 @@
+"""Entry point for Susan command-line interface using `Click` library.
+Presentation and user interaction happens here, but no db access.
+"""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import os
 import logging
 
-import click
 from susan.config import bootstrap, get_config
 from susan import api
-from susan import db
+from susan.db import SESSIONMAKER
 
+import click
 import pyperclip
+
+DEFAULT_TOPIC = 'scratch'
 
 
 @click.group()
 @click.option('--debug/--no-debug', default=True)
 def cli(debug):
+    """Susan is a very simple note taker and implicit personal wiki
+    """
     config_path = os.path.join(
         click.get_app_dir('susan', 'config.ini', force_posix=True))
     bootstrap(filename=config_path)
@@ -25,25 +33,8 @@ def cli(debug):
 
 @cli.command()
 def version():
+    """Get the version"""
     click.echo('Version: ')
-
-
-@cli.command()
-def cli_test():
-    click.echo("test")
-
-
-@cli.command()
-@click.option("--topic", "-t", default=None, help="topic name")
-def noted(topic):
-    """Store a note (from editor) in a topic
-    """
-    if body:
-        conn = db._ENGINE.connect()
-        if not topic:
-            topic = 'scratch'
-        api.create_note(conn, body, topic=topic)
-        conn.close()
 
 
 @cli.command()
@@ -53,7 +44,7 @@ def noted(topic):
 def note(body, topic, clipboard):
     """Store a note in a topic
     """
-    conn = db._ENGINE.connect()
+    session = SESSIONMAKER()
     if clipboard:
         body = pyperclip.paste()
     if not body:
@@ -61,9 +52,9 @@ def note(body, topic, clipboard):
     if not body:
         return
     if not topic:
-        topic = 'scratch'
-    api.create_note(conn, body, topic=topic)
-    conn.close()
+        topic = DEFAULT_TOPIC
+    api.create_note(session, body, topic=topic)
+    session.commit()
 
 
 @cli.command()
@@ -75,15 +66,15 @@ def note(body, topic, clipboard):
 def head(count, only_1, topic, all_topics, clipboard):
     """Get the latest n notes in a topic
     """
-    conn = db._ENGINE.connect()
+    session = SESSIONMAKER()
     if not topic:
-        topic = 'scratch'
+        topic = DEFAULT_TOPIC
     if all_topics:
         topic = None
     notes = api.list_notes(
-        conn, limit=1 if only_1 else count, offset=0, topic=topic)
-    conn.close()
-    for note in notes:
-        click.echo(note.body)
+        session, limit=1 if only_1 else count, offset=0, topic=topic)
+    session.commit()
+    for item in notes:
+        click.echo(item.body)
     if clipboard:
         pyperclip.copy("\n".join([_.body for _ in notes]))

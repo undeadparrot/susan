@@ -1,19 +1,24 @@
+# -*- coding: utf-8 -*-
+"""SQLalchemy metadata and the db connection
+Susan uses SQLite3 and stores this in a place from the config file
+"""
+
 import logging
 
-from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import MetaData, Table, Column
-from sqlalchemy import Integer, String, DateTime, ForeignKey
 from sqlalchemy.sql import func
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy import MetaData, Table, Column
+from sqlalchemy import Integer, String, DateTime
 
-_ENGINE = None
+SESSIONMAKER = sessionmaker()
+BASE = declarative_base()
+METADATA = MetaData()
 
-Base = declarative_base()
-metadata = MetaData()
-
-note_table = Table(
+NOTES = Table(
     "note",
-    metadata,
+    METADATA,
     Column('note_id', Integer, primary_key=True),
     Column('topic', String),
     Column('body', String),
@@ -21,8 +26,12 @@ note_table = Table(
 
 
 def bootstrap(get_config):
+    """Prepare the engine, fetch connection strings.
+    Only run after config bootstrapping.
+    If using SQLite3, this creates the db too.
+    """
     connection_string = get_config().get('database', 'connection')
     logging.debug("Connection string: %s", connection_string)
-    global _ENGINE
-    _ENGINE = create_engine(connection_string)
-    metadata.create_all(_ENGINE)
+    engine = create_engine(connection_string)
+    METADATA.create_all(engine)
+    SESSIONMAKER.configure(bind=engine)
