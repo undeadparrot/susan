@@ -18,5 +18,5 @@ quality:
 	pylint src/susan
 
 deploy: install-dependencies clean build
-	twine upload dist/
+	twine upload dist/*
 
