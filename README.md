@@ -1,3 +1,57 @@
+susan - notes & ad-hoc wiki
+===========================
+
+```
+   _____
+  / ___/__  ___________ _____
+  \__ \/ / / / ___/ __ `/ __ \
+ ___/ / /_/ (__  ) /_/ / / / /
+/____/\__,_/____/\__,_/_/ /_/
+```
+
+Susan is a very simple note-taker and wiki tool for the command line / cli.
+
+Usage
+-----
+
+The first command you should type is `susan` because it shows the help. All subcommands have help through `--help`. To get things done, you'll mostly be interested in `susan note` and `susan head`.
+
+### aliases
+
+I recommend making some short aliases for common `susan` subcommands. For example
+
+```
+alias susn "susan note"
+alias sush "susan head"
+alias suhh "susan head -1" #this only prints the top note
+```
+
+### susan note
+
+```
+> susan note "Write this on the default topic"
+> susan note "This is another note"
+```
+
+```
+> susan note -ttodo "I have so much todo"
+```
+
+### susan head
+
+```
+> susan head
+This is another note
+Write this on the default topic
+```
+
+```
+> susan head todo
+I have so much todo
+```
+
+License 
+-------------------
 MIT License
 
 Copyright (c) 2017 Shane Matuszek 
