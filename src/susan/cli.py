@@ -48,7 +48,7 @@ def note(body, topic, **kwargs):
     if kwargs['clipboard']:
         body = pyperclip.paste()
     if not body:
-        body = click.edit()
+        body = click.edit(extension='.md')
     if not body:
         return
     if not topic:
